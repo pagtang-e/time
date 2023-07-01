@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "dayjs": "^1.11.8",
+    "nodemon": "^2.0.22"
+  },
+  "name": "time",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "demon": "nodemon ./index.js",
+    "watch" : "npx watchify index.js -o bundle.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "i": "^0.3.7",
+    "npm": "^9.7.2",
+    "watchify": "^4.0.0"
+  }
+}
