@@ -5,11 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="bundle.js" defer></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header>
+        <input type="checkbox" id="clockType">
+        <label for="clockType">a</label>
+
+        <div id="menuLines" role="button" title="open Menu" data-micromodal-trigger='modal-2'>
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+        </div>
+        <div id="modal-2" aria-hidden="true" class="modal"> 
+            <div tabindex="-1" data-micromodal-close>   
+              <div role="dialog" aria-modal="true" aria-labelledby="modal-2-title" > 
+                <div id="modal-1-content">
+                  <div aria-label="Close modal" data-micromodal-close id="submit-Modal-2"></div>
+                  <div>
+                    <input type="checkbox" id="12hrFormat">
+                    <label for="12hrFormat"></label>
+                </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        
+    </header>
+
+    <main>
+
+     <article>  
+        <div class="wrapper">
     <p aria-label="your timezone" role="note"></p>
+    <button data-micromodal-trigger='modal-1'>open modal</button>
+        </div>
     <h1 aria-label="your local time" role="timer"></h1>
     <h2 aria-label="your date" role="note"></h2>
+</article> 
+<article>
+    <img src="pexels-patrycja-grobelny-11706612.jpg" alt="clocktower in Stein am Rhein, SH, Switzerland">
+    <p>Photo by Patrycja Grobelny</p>
 
+    <h2>About me</h2>
+    <p>This website isn’t anything special but it was created for me to learn npm and this part
+         felt kind of empty so i decided to include some sort of about me so here it is I still
+        have a lot of unused space so let me just write a bit of bullshit yeah so everybody 
+        knows that i am a high school student and that i like making websites and basically i
+        also love skating and snowboarding so wow i am amazing and all that stuff i had 5.94
+        grade average at the end of firs year and i was 11th in the entire school so that 
+        pretty cool so yeah i think thats enought </p>
+</article>
+
+   
+<div id="modal-1" aria-hidden="true" class="modal"> 
+    <div tabindex="-1" data-micromodal-close>   
+      <div role="dialog" aria-modal="true" aria-labelledby="modal-1-title" > 
+        <header>
+          <h2 id="modal-1-title">
+          choose the city
+          </h2>
+        </header>
+        <div id="modal-1-content">
+          <input type="text" id="city">
+        </div>
+        <button aria-label="Close modal" data-micromodal-close id="submit-Modal-1">submit</button>
+      </div>
+    </div>
+  </div>
+
+</main>
 </body>
+
 </html>

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "dayjs": "^1.11.8",
+    "micromodal": "^0.4.10",
     "nodemon": "^2.0.22"
   },
   "name": "time",
@@ -8,7 +9,7 @@
   "main": "index.js",
   "scripts": {
     "demon": "nodemon ./index.js",
-    "watch" : "npx watchify index.js -o bundle.js"
+    "watch": "npx watchify index.js -o bundle.js"
   },
   "keywords": [],
   "author": "",
