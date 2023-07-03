@@ -9,8 +9,8 @@
 </head>
 <body>
     <header>
-        <input type="checkbox" id="clockType">
-        <label for="clockType">a</label>
+        <input type="checkbox" id="clockType" title="clock Type">
+        <label for="clockType" aria-hidden="true">Analog clock</label>
 
         <div id="menuLines" role="button" title="open Menu" data-micromodal-trigger='modal-2'>
             <span class="line"></span>
@@ -20,12 +20,13 @@
         <div id="modal-2" aria-hidden="true" class="modal"> 
             <div tabindex="-1" data-micromodal-close>   
               <div role="dialog" aria-modal="true" aria-labelledby="modal-2-title" > 
-                <div id="modal-1-content">
-                  <div aria-label="Close modal" data-micromodal-close id="submit-Modal-2"></div>
-                  <div>
-                    <input type="checkbox" id="12hrFormat">
-                    <label for="12hrFormat"></label>
-                </div>
+                <div aria-label="Close modal" data-micromodal-close id="submit-Modal-2"></div>
+                <div id="modal-2-content">
+                  
+                  
+                    <input type="checkbox" id="hr12Format">
+                    <label for="hr12Format"></label>
+                
                 </div>
                 
               </div>
