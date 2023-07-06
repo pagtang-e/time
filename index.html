@@ -9,14 +9,13 @@
 </head>
 <body>
     <header>
+      <div>
         <input type="checkbox" id="clockType" title="clock Type">
         <label for="clockType" aria-hidden="true">Analog clock</label>
+      </div>
+      
 
-        <div id="menuLines" role="button" title="open Menu" data-micromodal-trigger='modal-2'>
-            <span class="line"></span>
-            <span class="line"></span>
-            <span class="line"></span>
-        </div>
+        
         <div id="modal-2" aria-hidden="true" class="modal"> 
             <div tabindex="-1" data-micromodal-close>   
               <div role="dialog" aria-modal="true" aria-labelledby="modal-2-title" > 
@@ -26,24 +25,53 @@
                   
                     <input type="checkbox" id="hr12Format">
                     <label for="hr12Format"></label>
+                    <div>
+                      <input type="checkbox" id="seconds" title="seconds">
+                      <label for="seconds" aria-hidden="true"></label>
+                    </div>
                 
                 </div>
                 
               </div>
             </div>
           </div>
+          <div id="menuLines" role="button" title="open Menu" data-micromodal-trigger='modal-2'>
+            <span class="line" id="line1"></span>
+            <span class="line" id="line2"></span>
+            <span class="line" id="line3"></span>
+        </div>
         
     </header>
 
     <main>
 
      <article>  
+      <section class="analog">
+      <div class="number n1">1</div>
+      <div class="number n2">2</div>
+      <div class="number n3">3</div>
+      <div class="number n4">4</div>
+      <div class="number n5">5</div>
+      <div class="number n6">6</div>
+      <div class="number n7">7</div>
+      <div class="number n8">8</div>
+      <div class="number n9">9</div>
+      <div class="number n10">10</div>
+      <div class="number n11">11</div>
+      <div class="number n12">12</div>
+      <div class="center"></div>
+      <div class="hour hand"></div>
+      <div class="minute hand"></div>
+      <div class="second hand"></div>
+      </section>
+      <section class="digital">
         <div class="wrapper">
-    <p aria-label="your timezone" role="note"></p>
+    <p aria-label="your timezone" role="note" class="TimeZone"></p>
     <button data-micromodal-trigger='modal-1'>open modal</button>
         </div>
     <h1 aria-label="your local time" role="timer"></h1>
     <h2 aria-label="your date" role="note"></h2>
+  </section>
 </article> 
 <article>
     <img src="pexels-patrycja-grobelny-11706612.jpg" alt="clocktower in Stein am Rhein, SH, Switzerland">
@@ -63,15 +91,17 @@
 <div id="modal-1" aria-hidden="true" class="modal"> 
     <div tabindex="-1" data-micromodal-close>   
       <div role="dialog" aria-modal="true" aria-labelledby="modal-1-title" > 
-        <header>
-          <h2 id="modal-1-title">
-          choose the city
-          </h2>
-        </header>
+        
         <div id="modal-1-content">
+          <header>
+            <h2 id="modal-1-title">
+            Choose the city
+            </h2>
+          </header>
           <input type="text" id="city">
+          <button aria-label="Close modal" data-micromodal-close id="submit-Modal-1">submit</button>
         </div>
-        <button aria-label="Close modal" data-micromodal-close id="submit-Modal-1">submit</button>
+        
       </div>
     </div>
   </div>

@@ -2,6 +2,13 @@
 body{
     background-color: #E4EBF2;
     font-family: 'Noto Serif Display', serif;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+}
+label{
+    -webkit-user-select: none;
+    user-select: none;
 }
 *{
     box-sizing: border-box;
@@ -9,12 +16,18 @@ body{
 main{
     display: flex;
 
+    align-content: flex-end;
+    justify-content: center;
+   margin-top: 10%;
+    
+
 }
 header{
     display: flex;
     align-items: center;
     gap: 1rem;
     justify-content: center;
+    margin-top: 1rem;
 }
 #clockType{
     display: none;
@@ -78,6 +91,23 @@ label[for="clockType"]::after{
     height: 40px;
     flex-direction: column;
     justify-content: space-between;
+    overflow: hidden;
+    
+}
+.modal.is-open ~ #menuLines{
+
+z-index: -1;
+
+}
+.modal.is-open ~ #menuLines #line1{
+    transform:  translateY(19px)  rotate(-45deg);
+
+}
+.modal.is-open ~ #menuLines #line2{
+    transform: rotate(45deg);
+}
+.modal.is-open ~ #menuLines #line3{
+    transform: translateY(5px);
 }
 #modal-2{
     position: absolute;
@@ -95,16 +125,17 @@ span{
     height: 2px;
     width: 50px;
     background-color: #333322;
+    transition: transform 500ms ease-in-out;
 }
 #modal-2-content{
-    height: 70px;
+    height: 120px;
     width: 300px;
-    top: 80px;
+    top: 90px;
     left: calc(50% + 40px);
     position: absolute;
     background-color: #E2DDD5;
 }
-#modal-2-content::before{
+#modal-2-content::before , #modal-1::before{
     content: '';
     box-sizing: content-box;
     width: 0px;
@@ -114,12 +145,12 @@ span{
    border-color: transparent transparent #E2DDD5 transparent;
    position: absolute;
    top: 0;
-   left: 5%;
+   left: 7%;
    transform: translateY(-100%);
   
       
 }
-label[for="hr12Format"]{
+label[for="hr12Format"], label[for="seconds"]{
     display: block;
     height: 30px;
     width: 75px;
@@ -128,17 +159,23 @@ label[for="hr12Format"]{
     border: 1px solid #2E578Caa;
    margin-left: auto;
    margin-right: 1rem;
+   
 }
-label[for="hr12Format"]::before{
+label[for="hr12Format"]::before, label[for="seconds"]::before{
     content: '12 hour format';
     position: absolute;
     font-size: 25px;
     left: 1rem;
-    top: 50%;
+    top: 30%;
     transform: translate(0,-50%);
     
 }
-label[for="hr12Format"]::after{
+label[for="seconds"]::before{
+    content: 'Seconds hand';
+    top: 74%;
+    transform: translate(0,-50%);
+}
+label[for="hr12Format"]::after, label[for="seconds"]::after{
     content: '';
     position: absolute;
     height: 28px;
@@ -146,18 +183,18 @@ label[for="hr12Format"]::after{
     background-color: #D9A362aa;
     border-radius: 50%;
     right: calc(1rem + 74px - 28px);
-    transition: right 1000ms;
+    transition: right 500ms;
 }
-input:checked + label[for="hr12Format"]{
+input:checked + label[for="hr12Format"], input:checked + label[for="seconds"]{
 
     background-color: #2E578C;
     border-color: #D9A362aa;
 }
-input:checked + label[for="hr12Format"]::after{
+input:checked + label[for="hr12Format"]::after, input:checked + label[for="seconds"]::after{
     background-color: #79ACD9;
     right: calc(1rem + 1px);
 }
-#hr12Format{
+#hr12Format, #seconds{
     visibility: hidden;
 }
 article:first-of-type{
@@ -166,23 +203,157 @@ article:first-of-type{
     flex-direction: column;
     justify-content: center;
     align-content: center;
-
+    padding: 2rem;
+    flex-shrink: 0;
     
+}
+.analog{
+    display: none;
 }
 .wrapper{
     display: flex;
+    justify-content: flex-end;
 }
 h1{
     margin: 0;
     font-weight: 400;
     font-size: 200px;
     line-height: 100%;
+    color: #2E578C;
+    text-align: right;
+    
 }
-p:first-of-type{
+div > p:first-of-type{
     font-size: 40px;
     margin: 0;
+    color: #8C5B3E;
 
 }
+h2[aria-label="your date"]{
+    color: #D9A362;
+    text-align: right;
+}
+div > p + button{
+    width: 50px;
+    border: none;
+    background-color: transparent;
+    background-image: url(icons8-book-and-pencil-100.png);
+    background-position: center;
+    background-size: 45px;
+    background-repeat: no-repeat;
+    color: transparent;
+    z-index: 2;
+}
+.analog{
+    
+    width: 430px;
+    height: 430px;
+    border-radius: 50%;
+    background-color: #D9A36255;
+    border: 2px solid #2E578C;
+    position: relative;
+}
+.number{
+    font-size: 30px;
+    color: #2E578C;
+    position: absolute;
+   margin: 0.1rem;
+   
+   
+}
+
+.n12{
+    left: 50%;
+    top: 5%;
+    transform: translate(-50%,-50%);
+}
+.n3{
+    top: 50%;
+    right: 0;
+    transform: translate(-50%,-50%);
+}
+.n6{
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%,0%);
+}
+.n9{
+    top: 50%;
+    left: 0;
+    transform: translate(50%,-50%);
+}
+.n1{
+    top: 6.5%;
+    right: 22%;
+}
+.n2{
+    top: 24%;
+    right: 7%;
+}
+.n4{
+    right: 7%;
+    bottom: 24%;
+}
+.n5{
+    right: 22%;
+   bottom: 6.5%;
+}
+.n7{
+    left: 22%;
+    bottom: 6.5%;
+}
+.n8{
+    left: 7%;
+    bottom: 24%;
+}
+.n10{
+    left: 7%;
+    top: 24%;
+}
+.n11{
+    left: 22%;
+    top: 6.5%;
+}
+.center{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background-color: #6B442E;
+    border-radius: 50%;
+}
+.hand{
+   
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    width: 426px;
+    height: 426px;
+   background-size: 87%;
+  
+   
+}
+.hour{
+   
+    
+    
+    background-image: url(hour-hand.png);
+    
+   
+}
+.minute{
+    background-image: url(minute-hand.png);
+    
+}
+.second{
+    background-image: url(second-hand.png);
+    
+}
+
 h2:first-of-type{
     font-size: 40px;
     margin: 0;
@@ -195,4 +366,81 @@ img{
 }
 .modal.is-open{
     display: flex;
+}
+article:nth-of-type(2){
+    width: 400px;
+    background-color: #AFCBE6;
+    color: #6B442E;
+   
+    
+}
+article:nth-of-type(2) img{
+    width: 100%;
+    height: 180px;
+  object-fit: cover;
+  object-position: 0% 20%;
+  
+}
+article:nth-of-type(2) p:first-of-type{
+    margin: 0;
+    text-align: right;
+    font-size: 12px;
+   
+}
+article:nth-of-type(2) h2{
+    font-size: 30px;
+    font-weight: 400;
+    margin-inline: 1rem;
+    margin-block: 0;
+  
+}
+article:nth-of-type(2) p:nth-of-type(2){
+    text-align: justify;
+    margin-inline: 1rem;
+    margin-top: 0;
+    font-size: 15px;
+   margin-bottom: 5%;
+    
+}
+#modal-1{
+    position: absolute;
+    background-color: #cec2b3ee;
+    padding: 0.5rem;
+    top: calc(10vw + 240px);
+    left: 49%;
+
+}
+#modal-1::before{
+
+    border-bottom-color: #cec2b3ee;
+
+}
+#modal-1 h2{
+    font-size: 30px;
+    color: #8C5B3E;
+    text-align: left;
+    width: 100%;
+}
+#modal-1 input{
+    width: 300px;
+    height: 40px;
+    background-color: #e6dccf55;
+    border: 1px solid #2E578C;
+    font-size: 20px;
+    font-family: 'Noto Serif Display', serif;
+    
+}
+#modal-1 button{
+    height: 40px;
+    width: 100px;
+    background-color: #977e7088;
+    border: 1px solid #2E578C;
+   font-size: 20px;
+   
+    font-family: 'Noto Serif Display', serif;
+    vertical-align:bottom;
+    
+}
+#modal-1 header{
+    margin: 0;
 }

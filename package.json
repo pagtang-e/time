@@ -2,7 +2,8 @@
   "dependencies": {
     "dayjs": "^1.11.8",
     "micromodal": "^0.4.10",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "ordinal": "^1.0.3"
   },
   "name": "time",
   "version": "1.0.0",
