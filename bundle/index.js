@@ -368,6 +368,59 @@
     }
   });
 
+  // node_modules/dayjs/plugin/advancedFormat.js
+  var require_advancedFormat = __commonJS({
+    "node_modules/dayjs/plugin/advancedFormat.js"(exports, module) {
+      !function(e, t) {
+        "object" == typeof exports && "undefined" != typeof module ? module.exports = t() : "function" == typeof define && define.amd ? define(t) : (e = "undefined" != typeof globalThis ? globalThis : e || self).dayjs_plugin_advancedFormat = t();
+      }(exports, function() {
+        "use strict";
+        return function(e, t) {
+          var r = t.prototype, n = r.format;
+          r.format = function(e2) {
+            var t2 = this, r2 = this.$locale();
+            if (!this.isValid())
+              return n.bind(this)(e2);
+            var s = this.$utils(), a = (e2 || "YYYY-MM-DDTHH:mm:ssZ").replace(/\[([^\]]+)]|Q|wo|ww|w|WW|W|zzz|z|gggg|GGGG|Do|X|x|k{1,2}|S/g, function(e3) {
+              switch (e3) {
+                case "Q":
+                  return Math.ceil((t2.$M + 1) / 3);
+                case "Do":
+                  return r2.ordinal(t2.$D);
+                case "gggg":
+                  return t2.weekYear();
+                case "GGGG":
+                  return t2.isoWeekYear();
+                case "wo":
+                  return r2.ordinal(t2.week(), "W");
+                case "w":
+                case "ww":
+                  return s.s(t2.week(), "w" === e3 ? 1 : 2, "0");
+                case "W":
+                case "WW":
+                  return s.s(t2.isoWeek(), "W" === e3 ? 1 : 2, "0");
+                case "k":
+                case "kk":
+                  return s.s(String(0 === t2.$H ? 24 : t2.$H), "k" === e3 ? 1 : 2, "0");
+                case "X":
+                  return Math.floor(t2.$d.getTime() / 1e3);
+                case "x":
+                  return t2.$d.getTime();
+                case "z":
+                  return "[" + t2.offsetName() + "]";
+                case "zzz":
+                  return "[" + t2.offsetName("long") + "]";
+                default:
+                  return e3;
+              }
+            });
+            return n.bind(this)(a);
+          };
+        };
+      });
+    }
+  });
+
   // node_modules/ordinal/indicator.js
   var require_indicator = __commonJS({
     "node_modules/ordinal/indicator.js"(exports, module) {
@@ -564,80 +617,95 @@
     }
   });
 
-  // js/timezone.mjs
+  // js/digitalClock.mjs
   var dayjs = require_dayjs_min();
   var utc = require_utc();
   var timezone = require_timezone();
+  var advancedFormat = require_advancedFormat();
   dayjs.extend(utc);
   dayjs.extend(timezone);
-  var Timezone = dayjs.tz.guess();
-  function getTimezone() {
-    city = document.getElementById("city").value;
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${city} &key=AIzaSyDu8Aze6F6zs1Vgjco6PmgzhWhOyS0rDnE`).then((res) => res.json()).then((data) => GetCoordinates(data));
-    function GetCoordinates(data) {
-      coordinates = data.results[0].geometry.location.lat + "," + data.results[0].geometry.location.lng;
-      getTimezone2();
-    }
-    function getTimezone2() {
-      fetch(`https://maps.googleapis.com/maps/api/timezone/json?location=${coordinates}&timestamp=${dayjs().unix()}&key=AIzaSyDu8Aze6F6zs1Vgjco6PmgzhWhOyS0rDnE`).then((res) => res.json()).then((data) => setNewTimezone(data));
-      function setNewTimezone(data) {
-        Timezone = data.timeZoneId;
-        clearInterval(startTimeLocalInterval);
-        getLocalTime();
-      }
-    }
-  }
-
-  // js/index.mjs
-  var dayjs2 = require_dayjs_min();
-  var utc2 = require_utc();
-  var timezone2 = require_timezone();
-  var ordinal = require_ordinal();
-  var MicroModal = require_micromodal();
-  var indicator = require_indicator();
-  var MicroModalSubmit1 = document.getElementById("submit-Modal-1");
-  dayjs2.extend(utc2);
-  dayjs2.extend(timezone2);
-  MicroModal.init();
+  dayjs.extend(advancedFormat);
   var timer = document.querySelector("H1");
   var timezoneLocal = document.querySelector(".TimeZone");
   var Date2 = document.querySelector("h2");
-  var startTimeLocalInterval2;
+  var startTimeLocalInterval;
   var secondRotation;
   var minuteRotation;
   var HourRotation;
   var minuteHand = document.querySelector(".hand.minute");
   var secondHand = document.querySelector(".hand.second");
   var hourHand = document.querySelector(".hand.hour");
-  getLocalTime2();
-  getLocalTimeAnalog();
-  function getLocalTime2() {
-    startTimeLocalInterval2 = setInterval(startTimeLocal, 1e3);
+  function getLocalTimeDigital() {
+    startTimeLocalInterval = setInterval(startTimeLocalDigital, 1e3);
     timezoneLocal.innerText = Timezone;
-    startTimeLocal();
+    startTimeLocalDigital();
+  }
+  function startTimeLocalDigital() {
+    timer.innerText = dayjs().tz(Timezone).format("HH:mm");
+    Date2.innerText = dayjs().tz(Timezone).format("dddd, Do of MMMM YYYY");
   }
   function getLocalTimeAnalog() {
     startTimeLocalAnalog();
-    startTimeLocalInterval2 = setInterval(startTimeLocalAnalog, 1e3);
-    timezoneLocal.innerText = dayjs2.tz.guess();
+    startTimeLocalInterval = setInterval(startTimeLocalAnalog, 1e3);
+    timezoneLocal.innerText = Timezone;
   }
   function startTimeLocalAnalog() {
-    secondRotation = 360 / 60 * dayjs2().second();
-    minuteRotation = 360 / 60 * dayjs2().minute();
-    HourRotation = 360 / 12 * (dayjs2().hour() % 12) + 30 * dayjs2().minute() / 60;
+    secondRotation = 360 / 60 * dayjs().tz(Timezone).second();
+    minuteRotation = 360 / 60 * dayjs().tz(Timezone).minute();
+    HourRotation = 360 / 12 * (dayjs().tz(Timezone).hour() % 12) + 30 * dayjs().tz(Timezone).minute() / 60;
     HourRotation = Math.round(HourRotation * 10) / 10;
     hourHand.style.rotate = HourRotation + "deg";
     minuteHand.style.rotate = minuteRotation + "deg";
     secondHand.style.rotate = secondRotation + "deg";
   }
-  function startTimeLocal() {
-    timer.innerText = dayjs2().tz(Timezone).format("HH:mm");
-    Date2.innerText = dayjs2().tz(Timezone).format("dddd, D") + indicator(dayjs2().tz(Timezone).date()) + dayjs2().tz(Timezone).format(" of MMMM YYYY");
+
+  // js/timezone.mjs
+  var dayjs2 = require_dayjs_min();
+  var utc2 = require_utc();
+  var timezone2 = require_timezone();
+  dayjs2.extend(utc2);
+  dayjs2.extend(timezone2);
+  var Timezone = dayjs2.tz.guess();
+  var Longitude;
+  var Latitude;
+  function getTimezone(city, callback) {
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${city} &key=AIzaSyDu8Aze6F6zs1Vgjco6PmgzhWhOyS0rDnE`).then((res) => res.json()).then((data) => GetCoordinates(data));
+    function GetCoordinates(data) {
+      Longitude = data.results[0].geometry.location.lat + "," + data.results[0].geometry.location.lng;
+      Latitude = data.results[0].geometry.location.lat + "," + data.results[0].geometry.location.lat;
+      getTimezone2();
+    }
+    function getTimezone2() {
+      fetch(`https://maps.googleapis.com/maps/api/timezone/json?location=${Longitude}&timestamp=${dayjs2().unix()}&key=AIzaSyDu8Aze6F6zs1Vgjco6PmgzhWhOyS0rDnE`).then((res) => res.json()).then((data) => setNewTimezone(data));
+      function setNewTimezone(data) {
+        Timezone = data.timeZoneId;
+        clearInterval(startTimeLocalInterval);
+        if (clockType.checked == true) {
+          getLocalTimeAnalog();
+        } else {
+          getLocalTimeDigital();
+        }
+      }
+    }
   }
-  MicroModalSubmit1.addEventListener("click", getTimezone);
+
+  // js/index.mjs
+  var dayjs3 = require_dayjs_min();
+  var utc3 = require_utc();
+  var timezone3 = require_timezone();
+  var ordinal = require_ordinal();
+  var MicroModal = require_micromodal();
+  var indicator = require_indicator();
+  var MicroModalSubmit1 = document.getElementById("submit-Modal-1");
+  dayjs3.extend(utc3);
+  dayjs3.extend(timezone3);
+  MicroModal.init();
   var clockType = document.getElementById("clockType");
+  getLocalTimeDigital();
+  MicroModalSubmit1.addEventListener("click", getTimezone);
   clockType.addEventListener("click", () => {
     if (clockType.checked == true) {
+      getLocalTimeAnalog();
       document.querySelector(".digital").style.display = "none";
       document.querySelector(".analog").style.display = "block";
     } else {

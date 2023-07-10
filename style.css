@@ -27,7 +27,7 @@ header{
     align-items: center;
     gap: 1rem;
     justify-content: center;
-    margin-top: 1rem;
+    padding-top: 1rem;
 }
 #clockType{
     display: none;
@@ -233,7 +233,7 @@ h2[aria-label="your date"]{
     color: #D9A362;
     text-align: right;
 }
-div > p + button{
+button[data-micromodal-trigger='modal-1']{
     width: 50px;
     border: none;
     background-color: transparent;
@@ -243,6 +243,12 @@ div > p + button{
     background-repeat: no-repeat;
     color: transparent;
     z-index: 2;
+}
+button[data-micromodal-trigger='modal-1'].analogOpen{
+    position: absolute;
+    height: 50px;
+    top: 15%;
+    left: 94%;
 }
 .analog{
     
