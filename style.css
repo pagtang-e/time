@@ -197,6 +197,28 @@ input:checked + label[for="hr12Format"]::after, input:checked + label[for="secon
 #hr12Format, #seconds{
     visibility: hidden;
 }
+#sunriseTime, #sunsetTime{
+    font-size: 25px;
+    color: #2E578C;
+    margin-bottom: 0;
+    margin-top: 0.5rem;
+    margin-left: 1rem;
+}
+#sunriseTime::before ,#sunsetTime::before{
+    content: '';
+    background-image: url(icons8-sunrise-48.png);
+    background-size: 100%;
+    height: 30px;
+    width: 30px;
+    margin-right: 0.5rem;
+    display: inline-block;
+    vertical-align:bottom;
+    
+
+}
+#sunsetTime::before{
+    background-image: url(icons8-sunset-48.png);
+}
 article:first-of-type{
     background-color: #d9a3623a;
     display: flex;
@@ -205,6 +227,7 @@ article:first-of-type{
     align-content: center;
     padding: 2rem;
     flex-shrink: 0;
+    position: relative;
     
 }
 .analog{
@@ -337,9 +360,9 @@ button[data-micromodal-trigger='modal-1'].analogOpen{
     left: 0%;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    width: 426px;
-    height: 426px;
-   background-size: 87%;
+    width: 100%;
+    height: 100%;
+   background-size: 90%;
   
    
 }
@@ -449,4 +472,16 @@ article:nth-of-type(2) p:nth-of-type(2){
 }
 #modal-1 header{
     margin: 0;
+}
+.analogSunTime{
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: -1;
+    margin: 0 !important;
+
+}
+.analogSunTime#sunsetTime{
+    top: 67%;
 }

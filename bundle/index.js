@@ -421,42 +421,6 @@
     }
   });
 
-  // node_modules/ordinal/indicator.js
-  var require_indicator = __commonJS({
-    "node_modules/ordinal/indicator.js"(exports, module) {
-      module.exports = function indicator2(i) {
-        i = Math.abs(i);
-        var cent = i % 100;
-        if (cent >= 10 && cent <= 20)
-          return "th";
-        var dec = i % 10;
-        if (dec === 1)
-          return "st";
-        if (dec === 2)
-          return "nd";
-        if (dec === 3)
-          return "rd";
-        return "th";
-      };
-    }
-  });
-
-  // node_modules/ordinal/index.js
-  var require_ordinal = __commonJS({
-    "node_modules/ordinal/index.js"(exports, module) {
-      var indicator2 = require_indicator();
-      function ordinal2(i) {
-        if (typeof i !== "number")
-          throw new TypeError("Expected Number, got " + typeof i + " " + i);
-        if (!Number.isFinite(i))
-          return i;
-        return i + indicator2(i);
-      }
-      ordinal2.indicator = indicator2;
-      module.exports = ordinal2;
-    }
-  });
-
   // node_modules/micromodal/dist/micromodal.js
   var require_micromodal = __commonJS({
     "node_modules/micromodal/dist/micromodal.js"(exports, module) {
@@ -668,15 +632,37 @@
   var Timezone = dayjs2.tz.guess();
   var Longitude;
   var Latitude;
-  function getTimezone(city, callback) {
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${city} &key=AIzaSyDu8Aze6F6zs1Vgjco6PmgzhWhOyS0rDnE`).then((res) => res.json()).then((data) => GetCoordinates(data));
+  var sunriseTime;
+  var sunsetTime;
+  var sunriseTimeElement = document.getElementById("sunriseTime");
+  var sunsetTimeElement = document.getElementById("sunsetTime");
+  var city = document.getElementById("city");
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      Latitude = position.coords.latitude;
+      Longitude = position.coords.longitude;
+      getSunsetAndSunrise();
+      fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${Latitude},${Longitude}&key=AIzaSyDu8Aze6F6zs1Vgjco6PmgzhWhOyS0rDnE&result_type=political|country`).then((res) => res.json()).then((data) => console.log(data));
+    }
+  );
+  function getSunsetAndSunrise() {
+    fetch(`https://api.sunrise-sunset.org/json?lat=${Latitude}&lng=${Longitude}&formatted=0`).then((res) => res.json()).then((data) => getTimes(data));
+    function getTimes(data) {
+      sunriseTime = dayjs2(data.results.sunrise).tz(Timezone).format("hh:mm");
+      sunsetTime = dayjs2(data.results.sunset).tz(Timezone).format("hh:mm");
+      sunriseTimeElement.innerText = sunriseTime;
+      sunsetTimeElement.innerText = sunsetTime;
+    }
+  }
+  function getTimezone() {
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${city.value} &key=AIzaSyDu8Aze6F6zs1Vgjco6PmgzhWhOyS0rDnE`).then((res) => res.json()).then((data) => GetCoordinates(data));
     function GetCoordinates(data) {
-      Longitude = data.results[0].geometry.location.lat + "," + data.results[0].geometry.location.lng;
-      Latitude = data.results[0].geometry.location.lat + "," + data.results[0].geometry.location.lat;
+      Longitude = data.results[0].geometry.location.lng;
+      Latitude = data.results[0].geometry.location.lat;
       getTimezone2();
     }
     function getTimezone2() {
-      fetch(`https://maps.googleapis.com/maps/api/timezone/json?location=${Longitude}&timestamp=${dayjs2().unix()}&key=AIzaSyDu8Aze6F6zs1Vgjco6PmgzhWhOyS0rDnE`).then((res) => res.json()).then((data) => setNewTimezone(data));
+      fetch(`https://maps.googleapis.com/maps/api/timezone/json?location=${Latitude + "," + Longitude}&timestamp=${dayjs2().unix()}&key=AIzaSyDu8Aze6F6zs1Vgjco6PmgzhWhOyS0rDnE`).then((res) => res.json()).then((data) => setNewTimezone(data));
       function setNewTimezone(data) {
         Timezone = data.timeZoneId;
         clearInterval(startTimeLocalInterval);
@@ -685,6 +671,9 @@
         } else {
           getLocalTimeDigital();
         }
+        console.log(Latitude);
+        console.log(Longitude);
+        getSunsetAndSunrise();
       }
     }
   }
@@ -693,10 +682,10 @@
   var dayjs3 = require_dayjs_min();
   var utc3 = require_utc();
   var timezone3 = require_timezone();
-  var ordinal = require_ordinal();
   var MicroModal = require_micromodal();
-  var indicator = require_indicator();
   var MicroModalSubmit1 = document.getElementById("submit-Modal-1");
+  var hr12FormatToggle = document.getElementById("hr12Format");
+  var sunriseTime2 = document.querySelector("#sunriseTime");
   dayjs3.extend(utc3);
   dayjs3.extend(timezone3);
   MicroModal.init();
@@ -708,9 +697,13 @@
       getLocalTimeAnalog();
       document.querySelector(".digital").style.display = "none";
       document.querySelector(".analog").style.display = "block";
+      sunriseTime2.classList.add("analogSunTime");
+      document.querySelector("#sunsetTime").classList.add("analogSunTime");
     } else {
       document.querySelector(".digital").style.display = "block";
       document.querySelector(".analog").style.display = "none";
+      sunriseTime2.classList.remove("analogSunTime");
+      document.querySelector("#sunsetTime").classList.remove("analogSunTime");
     }
   });
 })();
