@@ -2,6 +2,7 @@ const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 const timezone = require('dayjs/plugin/timezone');
 const advancedFormat = require('dayjs/plugin/advancedFormat');
+
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(advancedFormat)
@@ -21,6 +22,7 @@ let HourRotation;
 let minuteHand = document.querySelector('.hand.minute')
 let secondHand = document.querySelector('.hand.second')
 let hourHand = document.querySelector('.hand.hour')
+const formatCheck = document.getElementById('hr12Format')
 
 export function getLocalTimeDigital(){
     startTimeLocalInterval = setInterval(startTimeLocalDigital, 1000);
@@ -30,8 +32,25 @@ export function getLocalTimeDigital(){
   }
 
   function startTimeLocalDigital(){
+    if(formatCheck.checked){
+      timer.innerText= dayjs().tz(Timezone).format('hh:mm a');
+    }
+    else{
+      timer.innerText= dayjs().tz(Timezone).format('HH:mm');
+    }
+    
+    formatCheck.addEventListener("change", ()=>{
 
-    timer.innerText= dayjs().tz(Timezone).format('HH:mm');
+      if(formatCheck.checked){
+        timer.innerText= dayjs().tz(Timezone).format('hh:mm a');
+      }
+      else{
+        timer.innerText= dayjs().tz(Timezone).format('HH:mm');
+      }
+
+    })
+   
+
     Date.innerText = dayjs().tz(Timezone).format('dddd, Do of MMMM YYYY')
   
   }

@@ -599,13 +599,25 @@
   var minuteHand = document.querySelector(".hand.minute");
   var secondHand = document.querySelector(".hand.second");
   var hourHand = document.querySelector(".hand.hour");
+  var formatCheck = document.getElementById("hr12Format");
   function getLocalTimeDigital() {
     startTimeLocalInterval = setInterval(startTimeLocalDigital, 1e3);
     timezoneLocal.innerText = Timezone;
     startTimeLocalDigital();
   }
   function startTimeLocalDigital() {
-    timer.innerText = dayjs().tz(Timezone).format("HH:mm");
+    if (formatCheck.checked) {
+      timer.innerText = dayjs().tz(Timezone).format("hh:mm a");
+    } else {
+      timer.innerText = dayjs().tz(Timezone).format("HH:mm");
+    }
+    formatCheck.addEventListener("change", () => {
+      if (formatCheck.checked) {
+        timer.innerText = dayjs().tz(Timezone).format("hh:mm a");
+      } else {
+        timer.innerText = dayjs().tz(Timezone).format("HH:mm");
+      }
+    });
     Date2.innerText = dayjs().tz(Timezone).format("dddd, Do of MMMM YYYY");
   }
   function getLocalTimeAnalog() {
@@ -637,6 +649,7 @@
   var sunriseTimeElement = document.getElementById("sunriseTime");
   var sunsetTimeElement = document.getElementById("sunsetTime");
   var city = document.getElementById("city");
+  var formatCheck2 = document.getElementById("hr12Format");
   navigator.geolocation.getCurrentPosition(
     (position) => {
       Latitude = position.coords.latitude;
@@ -648,8 +661,24 @@
   function getSunsetAndSunrise() {
     fetch(`https://api.sunrise-sunset.org/json?lat=${Latitude}&lng=${Longitude}&formatted=0`).then((res) => res.json()).then((data) => getTimes(data));
     function getTimes(data) {
-      sunriseTime = dayjs2(data.results.sunrise).tz(Timezone).format("HH:mm");
-      sunsetTime = dayjs2(data.results.sunset).tz(Timezone).format("HH:mm");
+      formatCheck2.addEventListener("change", () => {
+        if (formatCheck2.checked) {
+          sunriseTime = dayjs2(data.results.sunrise).tz(Timezone).format("hh:mm a");
+          sunsetTime = dayjs2(data.results.sunset).tz(Timezone).format("hh:mm a");
+        } else {
+          sunriseTime = dayjs2(data.results.sunrise).tz(Timezone).format("HH:mm");
+          sunsetTime = dayjs2(data.results.sunset).tz(Timezone).format("HH:mm");
+        }
+        sunriseTimeElement.innerText = sunriseTime;
+        sunsetTimeElement.innerText = sunsetTime;
+      });
+      if (formatCheck2.checked) {
+        sunriseTime = dayjs2(data.results.sunrise).tz(Timezone).format("hh:mm a");
+        sunsetTime = dayjs2(data.results.sunset).tz(Timezone).format("hh:mm a");
+      } else {
+        sunriseTime = dayjs2(data.results.sunrise).tz(Timezone).format("HH:mm");
+        sunsetTime = dayjs2(data.results.sunset).tz(Timezone).format("HH:mm");
+      }
       sunriseTimeElement.innerText = sunriseTime;
       sunsetTimeElement.innerText = sunsetTime;
     }
@@ -657,7 +686,6 @@
   function getTimezone() {
     fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${city.value} &key=AIzaSyDu8Aze6F6zs1Vgjco6PmgzhWhOyS0rDnE`).then((res) => res.json()).then((data) => GetCoordinates(data));
     function GetCoordinates(data) {
-      console.log(data);
       Longitude = data.results[0].geometry.location.lng;
       Latitude = data.results[0].geometry.location.lat;
       getTimezone2();
@@ -682,6 +710,8 @@
   var utc3 = require_utc();
   var timezone3 = require_timezone();
   var MicroModal = require_micromodal();
+  var secondHandCheck = document.querySelector("#seconds");
+  var secondHand2 = document.querySelector(".hand.second");
   var MicroModalSubmit1 = document.getElementById("submit-Modal-1");
   var hr12FormatToggle = document.getElementById("hr12Format");
   var sunriseTime2 = document.querySelector("#sunriseTime");
@@ -689,6 +719,13 @@
   dayjs3.extend(timezone3);
   MicroModal.init();
   var clockType = document.getElementById("clockType");
+  secondHandCheck.addEventListener("change", () => {
+    if (secondHandCheck.checked) {
+      secondHand2.style.opacity = "100%";
+    } else {
+      secondHand2.style.opacity = "0";
+    }
+  });
   getLocalTimeDigital();
   MicroModalSubmit1.addEventListener("click", getTimezone);
   clockType.addEventListener("click", () => {

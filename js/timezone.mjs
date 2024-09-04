@@ -18,6 +18,7 @@ let sunsetTime;
 const sunriseTimeElement = document.getElementById('sunriseTime')
 const sunsetTimeElement = document.getElementById('sunsetTime')
 const city = document.getElementById('city')
+const formatCheck = document.getElementById('hr12Format')
 
 
   navigator.geolocation.getCurrentPosition(
@@ -41,9 +42,32 @@ const city = document.getElementById('city')
   .then(data => getTimes(data))
   
   function getTimes(data){
+
+   
+    formatCheck.addEventListener("change", ()=>{
+
+      if(formatCheck.checked){
+        sunriseTime = dayjs(data.results.sunrise).tz(Timezone).format('hh:mm a');
+        sunsetTime = dayjs(data.results.sunset).tz(Timezone).format('hh:mm a');
+      }
+      else{
+        sunriseTime = dayjs(data.results.sunrise).tz(Timezone).format('HH:mm');
+        sunsetTime = dayjs(data.results.sunset).tz(Timezone).format('HH:mm');
+      }
+
+      sunriseTimeElement.innerText = sunriseTime;
+      sunsetTimeElement.innerText = sunsetTime;
+    })
+
+    if(formatCheck.checked){
+      sunriseTime = dayjs(data.results.sunrise).tz(Timezone).format('hh:mm a');
+      sunsetTime = dayjs(data.results.sunset).tz(Timezone).format('hh:mm a');
+    }
+    else{
+      sunriseTime = dayjs(data.results.sunrise).tz(Timezone).format('HH:mm');
+      sunsetTime = dayjs(data.results.sunset).tz(Timezone).format('HH:mm');
+    }
     
-   sunriseTime = dayjs(data.results.sunrise).tz(Timezone).format('HH:mm');
-   sunsetTime = dayjs(data.results.sunset).tz(Timezone).format('HH:mm');
    sunriseTimeElement.innerText = sunriseTime;
    sunsetTimeElement.innerText = sunsetTime;
   }

@@ -2,8 +2,8 @@ const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 const timezone = require('dayjs/plugin/timezone');
 const MicroModal = require('micromodal');
-import { toMeridiem, toMilitary } from 'midday';
-
+let secondHandCheck = document.querySelector('#seconds')
+let secondHand = document.querySelector('.hand.second')
 const MicroModalSubmit1= document.getElementById('submit-Modal-1')
 const hr12FormatToggle = document.getElementById('hr12Format');
 const sunriseTime = document.querySelector('#sunriseTime');
@@ -17,7 +17,14 @@ export  let clockType = document.getElementById('clockType')
 
 
 
-
+secondHandCheck.addEventListener("change", ()=>{
+   if(secondHandCheck.checked){
+    secondHand.style.opacity = "100%"
+   }
+   else{
+    secondHand.style.opacity = "0"
+   }
+})
 
 
 
