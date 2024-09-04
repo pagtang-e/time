@@ -648,8 +648,8 @@
   function getSunsetAndSunrise() {
     fetch(`https://api.sunrise-sunset.org/json?lat=${Latitude}&lng=${Longitude}&formatted=0`).then((res) => res.json()).then((data) => getTimes(data));
     function getTimes(data) {
-      sunriseTime = dayjs2(data.results.sunrise).tz(Timezone).format("hh:mm");
-      sunsetTime = dayjs2(data.results.sunset).tz(Timezone).format("hh:mm");
+      sunriseTime = dayjs2(data.results.sunrise).tz(Timezone).format("HH:mm");
+      sunsetTime = dayjs2(data.results.sunset).tz(Timezone).format("HH:mm");
       sunriseTimeElement.innerText = sunriseTime;
       sunsetTimeElement.innerText = sunsetTime;
     }
@@ -657,6 +657,7 @@
   function getTimezone() {
     fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${city.value} &key=AIzaSyDu8Aze6F6zs1Vgjco6PmgzhWhOyS0rDnE`).then((res) => res.json()).then((data) => GetCoordinates(data));
     function GetCoordinates(data) {
+      console.log(data);
       Longitude = data.results[0].geometry.location.lng;
       Latitude = data.results[0].geometry.location.lat;
       getTimezone2();
@@ -671,8 +672,6 @@
         } else {
           getLocalTimeDigital();
         }
-        console.log(Latitude);
-        console.log(Longitude);
         getSunsetAndSunrise();
       }
     }

@@ -26,7 +26,7 @@ const city = document.getElementById('city')
       
        Latitude = position.coords.latitude;
       Longitude = position.coords.longitude;
-
+      
 
       getSunsetAndSunrise()
       fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${Latitude},${Longitude}&key=AIzaSyDu8Aze6F6zs1Vgjco6PmgzhWhOyS0rDnE&result_type=political|country`)
@@ -41,8 +41,9 @@ const city = document.getElementById('city')
   .then(data => getTimes(data))
   
   function getTimes(data){
-   sunriseTime = dayjs(data.results.sunrise).tz(Timezone).format('hh:mm');
-   sunsetTime = dayjs(data.results.sunset).tz(Timezone).format('hh:mm');
+    
+   sunriseTime = dayjs(data.results.sunrise).tz(Timezone).format('HH:mm');
+   sunsetTime = dayjs(data.results.sunset).tz(Timezone).format('HH:mm');
    sunriseTimeElement.innerText = sunriseTime;
    sunsetTimeElement.innerText = sunsetTime;
   }
@@ -70,7 +71,7 @@ export function getTimezone(){
   function getTimezone(){
       fetch(`https://maps.googleapis.com/maps/api/timezone/json?location=${Latitude +','+Longitude}&timestamp=${dayjs().unix()}&key=AIzaSyDu8Aze6F6zs1Vgjco6PmgzhWhOyS0rDnE`)
       .then(res => res.json())
-      .then(data=> setNewTimezone(data))
+      .then(data => setNewTimezone(data))
 
       function setNewTimezone(data){
         Timezone=data.timeZoneId
@@ -86,8 +87,7 @@ export function getTimezone(){
           getLocalTimeDigital()
         }
 
-        console.log(Latitude);
-        console.log(Longitude);
+        
         getSunsetAndSunrise()
 
       }
